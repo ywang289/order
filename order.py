@@ -37,14 +37,20 @@ def order_detail():
         data = json.loads(request.get_data())
         oid = data['oid']
         print(oid)
-        sql = 'SELECT c.mid, c.numbers FROM Contains c WHERE c.oid = {}'.format(oid)
-        result = db.session.execute(sql).fetchall()
-        # json_list=[]
-        answer={}
+        try:
+            sql = 'SELECT c.mid, c.numbers FROM Contains c WHERE c.oid = {}'.format(oid)
+            result = db.session.execute(sql).fetchall()
+        except Exception as err:
+            return {"state": False, "message": "error! input error"}
+        json_list=[]
         
         for row in result:
             # print("new row")
-            answer[row[0]]= row[1]
+            answer={}
+            answer["mid"]= row[0]
+            answer["amount"]= row[1]
+            json_list.append(answer)
+            
             # print(len(row))
             # json_list.append([x for x in row]) 
 
