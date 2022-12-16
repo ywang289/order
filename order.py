@@ -107,7 +107,7 @@ def place_order():
         data = json.loads(request.get_data())
         email= data['email']
         timestamp= data["timestamp"]
-        order= data['order']
+        items= data['items']
         oid= data['oid']
         print(oid)
 #       insert into Orders values (‘{}’) placeholder is oid
@@ -121,11 +121,10 @@ def place_order():
 #         for each (mid,numbers) in dictionary:
 #   insert into Contains values (‘{}’, ‘{}’, ‘{}’)
 # placeholder: oid, mid, numbers
-        for (mid, numbers) in order.items():
-            print(mid)
-            print(numbers)
+        for i in range(len(items)):
+            
             try:
-                sql="INSERT INTO Contains VALUES ('{}', '{}', '{}')".format(oid, mid, numbers)
+                sql="INSERT INTO Contains VALUES ('{}', '{}', '{}')".format(oid, items[i]['mid'], items[i]['amount'])
                 db.session.execute(sql)
             except Exception as err:
                 print("contains")
