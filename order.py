@@ -54,17 +54,9 @@ def order_detail():
             # print(len(row))
             # json_list.append([x for x in row]) 
 
-    return answer
+    return {"data": json_list}
 
-# /order/add_merchandise
-# data format from front-end to back-end
-# 	{email, name, price, remaining_amount, description, picture, mid}
-# <actually need mid>
-# data format from backend to front-end
-# 	{response: succeed or fail}
 
-# INSERT INTO Merchandises VALUES (‘{}’)
-# placeholder: mid
 
 @app.route('/order/add_merchandise', methods=['POST'])
 def delete_merchandise():
@@ -85,21 +77,6 @@ def delete_merchandise():
         response['state']= True
     return response
 
-# @app.route('/order/delete_merchandise', methods=['POST'])
-# def delete_merchandise():
-#     if request.method == 'POST':
-#         data = json.loads(request.get_data())
-#         oid = data['O']
-#         sql = ''
-#         result = db.session.execute(sql).fetchall()
-#         json_list=[]
-#         for row in result:
-#             json_list.append([x for x in row])       
-
-#     return json_list
-        
-
-# { "email":"test3@gmail.com", "timestamp":"2022-12-14 17:30:00" ,"order":{"1":"10", "10":"2"}, "oid":"4"}
 
 @app.route('/order/place_order', methods=['POST'])
 def place_order():
