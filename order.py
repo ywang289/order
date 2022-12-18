@@ -38,7 +38,7 @@ def order_detail():
         oid = data['oid']
         print(oid)
         try:
-            sql = 'SELECT c.mid, c.numbers FROM Contains c WHERE c.oid = {}'.format(oid)
+            sql = "SELECT c.mid, m.name, c.numbers FROM Merchandises m, Contains c WHERE c.oid = '{}' AND c.mid = m.mid".format(oid)
             result = db.session.execute(sql).fetchall()
         except Exception as err:
             return {"state": False, "message": "error! input error"}
@@ -48,7 +48,8 @@ def order_detail():
             # print("new row")
             answer={}
             answer["mid"]= row[0]
-            answer["amount"]= row[1]
+            answer["name"]= row[1]
+            answer["amount"]= row[2]
             json_list.append(answer)
             
             # print(len(row))
@@ -65,9 +66,14 @@ def delete_merchandise():
         data = json.loads(request.get_data())
         
         mid= data["mid"]
+        name= data["name"]
+        print ("mid")
+        print(mid)
+        print("name")
+        print (name)
         
         try:
-            sql="INSERT INTO Merchandises VALUES ('{}')".format(mid)
+            sql="INSERT INTO Merchandises VALUES ('{}','{}')".format(mid,name)
             db.session.execute(sql)
             
         except Exception as err:
@@ -77,6 +83,28 @@ def delete_merchandise():
         response['state']= True
     return response
 
+#<actually need mid, name>
+@app.route('/order/update_merchandise', methods=['POST'])
+def update_merchandise():
+    response={}
+    if request.method == 'POST':
+        data = json.loads(request.get_data())
+        
+        mid= data["mid"]
+        name= data["name"]
+        
+        try:
+            sql="UPDATE Merchandises SET Name = '{}' WHERE mid = '{}'".format(name, mid)
+            db.session.execute(sql)
+            
+        except Exception as err:
+            print("order")
+            return {"message": "error! change information error","state":False}  
+
+        response["message"]= True
+        response['state']= True
+
+    return response
 
 @app.route('/order/place_order', methods=['POST'])
 def place_order():
